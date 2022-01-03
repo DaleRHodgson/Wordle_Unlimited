@@ -41,6 +41,24 @@ def play():
     
         print(f"{step}: {color0}{char0} {color1}{char1} {color2}{char2} {color3}{char3} {color4}{char4} {Style.RESET_ALL}")
 
+    def play_again():
+        replay = ''
+        while replay.upper() not in ('Y','N'):
+            replay = input("Play again? Y/N ")
+        return(replay)
+
+    def restart():
+        global turn
+        replay = play_again()
+        if replay.upper() == 'Y':
+            print("Selecting new word:")
+            word = get_word()
+            display('', display_line, [wrong, wrong, wrong, wrong, wrong])
+        if replay.upper() == 'N':
+            print("closing...")
+            sleep(2)
+            quit()        
+        
     display(0, display_line, colors)
 
     guess = ''
@@ -66,26 +84,14 @@ def play():
 
             if colors == win:
                 print("Winner!")
-                replay = input("Play again? Y/N ")
-                if replay.upper() not in ('Y', 'N'):
-                    print("Please hit the Y key or the N key you cabbage. There's no error checking after this line.")
-                    replay = input("Play again? Y/N ")
-                if replay.upper() == 'N':
-                    print("closing...")
-                    sleep(2)
-                    quit()
-                if replay.upper() == 'Y':
-                    print("Selecting new word:")
-                    display('', display_line, [wrong, wrong, wrong, wrong, wrong])
-                    word = get_word()
+                restart()
+                turn = 1
+                
             elif turn >= 6:
                 print("LOSER!  It was:")
                 display('', word, [wrong, wrong, wrong, wrong, wrong])
+                restart()
                 turn = 1
-                print()
-                print("Selecting new word:")
-                display('', display_line, [wrong, wrong, wrong, wrong, wrong])
-                word = get_word()
             
             guess = ''
             colors = [wrong, wrong, wrong, wrong, wrong]
