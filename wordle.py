@@ -54,6 +54,8 @@ def play():
             print("Selecting new word:")
             word = get_word()
             display('', display_line, [wrong, wrong, wrong, wrong, wrong])
+            turn = 1
+            return(turn,word)
         if replay.upper() == 'N':
             print("closing...")
             sleep(2)
@@ -84,14 +86,12 @@ def play():
 
             if colors == win:
                 print("Winner!")
-                restart()
-                turn = 1
+                turn, word = restart()
                 
             elif turn >= 6:
                 print("LOSER!  It was:")
                 display('', word, [wrong, wrong, wrong, wrong, wrong])
-                restart()
-                turn = 1
+                turn, word = restart()
             
             guess = ''
             colors = [wrong, wrong, wrong, wrong, wrong]
