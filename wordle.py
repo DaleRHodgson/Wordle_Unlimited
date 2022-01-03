@@ -16,11 +16,8 @@ perfect = Fore.GREEN
 
 win = [perfect, perfect, perfect, perfect, perfect]
 
-gameover = False
-
 def get_word():
     return [ char for char in word_list[ random.randint(0,len(word_list)) ] ]
-
 
 def play():
     word = get_word()
@@ -43,9 +40,6 @@ def play():
         color4 = colored[4]
     
         print(f"{step}: {color0}{char0} {color1}{char1} {color2}{char2} {color3}{char3} {color4}{char4} {Style.RESET_ALL}")
-        
-
-    #display('', word, colors)
 
     display(0, display_line, colors)
 
@@ -62,17 +56,11 @@ def play():
             next_display = [ char.upper() for char in guess]
 
             for i in range(5):
-                char = next_display[i]
-
-                #print(f"checking char {i} = {char}")
-                
+                char = next_display[i]                
                 if char in word:
                     colors[i] = right
-                    #print(f"char {i} = {char} set to right")
                 if char == word[i]:
                     colors[i] = perfect
-                    #print(f"char {i} = {char} set to perfect")
-
             
             display(turn, next_display, colors)
 
