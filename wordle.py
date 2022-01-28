@@ -185,7 +185,7 @@ def play():
 # asks user for choice of settings to establish word list(s)
 print("#### Welcome to Wordle (knock-off)! ####")
 print(" ")
-print("Would you like to play with the ORIGINAL Wordle word-list (a smaller selection of more common words), or with the DALE list (larger selection of less common words and no silly-americanisms)?")
+print("Would you like to play with the ORIGINAL Wordle word-list (a smaller selection of more common words), or with the DALE list (larger selection of less common words)?")
 
 word_list, acceptable_list = set_game_settings()
 
