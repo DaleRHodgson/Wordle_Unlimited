@@ -18,4 +18,4 @@ if any letters in your guess are in the secret word and in the position you ente
 they will be highlighted GREEN. Letters which do not appear in the solution remani WHITE.
 
 After six incorrect guesses, or correctly finding the solution you will asked if you
-want to play again. Enter 'Y' to play another ruond, or 'N' to close the program.
+want to play again. Enter 'Y' to play another round, or 'N' to close the program.
