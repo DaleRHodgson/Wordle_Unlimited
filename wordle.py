@@ -1,3 +1,25 @@
+#! python3
+# wordle.py
+#
+# Dale R. Hodgson
+#
+# Play word-guessing game Wordle in the console, without the limitation of one game per-day.
+# Enter 'original' when the program starts to play with the original wordle's word-list
+# (as of 12/01/2022), or enter 'dale' to play with a larger selection of less-curated words.
+#
+#
+# GAMEPLAY:
+#
+# Every round a secret random five-letter word is selected, and you have six attempts to
+# identify it. Type in any valid five-letter word and hit Return to enter your guess.
+# If any letters in your guess are in the secret word, they will be highlighted YELLOW,
+# if any letters in your guess are in the secret word and in the position you entered,
+# they will be highlighted GREEN. Letters which do not appear in the solution remani WHITE.
+#
+# After six incorrect guesses, or correctly finding the solution you will asked if you
+# want to play again. Enter 'Y' to play another ruond, or 'N' to close the program.
+
+
 #### MODULES ####
 import random
 import os
@@ -19,14 +41,12 @@ with open("wordle_acceptable.txt") as ddd:
 
 
 #### VARIABLES ####
-word_list = []
-acceptable_list = []
+word_list           = []            # Filled by set_game_settings() method.         list
+acceptable_list     = []            # "     "
 
-wrong = Fore.WHITE
-right = Fore.YELLOW
-perfect = Fore.GREEN
-
-win = [perfect, perfect, perfect, perfect, perfect]
+wrong               = Fore.WHITE    # Used with colorama module for colour display. string
+right               = Fore.YELLOW   # "     "
+perfect             = Fore.GREEN    # "     "
 ####
 
 # Allow system settings to display colours.
@@ -34,7 +54,7 @@ os.system('color')
 Style.RESET_ALL
 
 
-#### FUNCTIONS
+#### METHODS ####
 def set_game_settings():
     # Used when file is first loaded to set word_list and acceptable_list for the session.
     # returns list, list
@@ -53,18 +73,20 @@ def set_game_settings():
 def get_word():
     # Used at start of each new game to randomly choose a word from word_list.
     # returns length five list of single character strings, e.g. [ 'W', 'O', 'R', 'D', 'S' ]
-    return [ char for char in word_list[ random.randint(0,len(word_list)) ] ]
+    random_word = word_list[ random.randint(0,len(word_list)) ]
+    return [ char for char in random_word ]
 
 
 def play():
     # Main function to run game. Continues until restart() function closes session.
     
     ### VARIABLES ###
-    word = get_word()                               # solution to current round
-    colors = [wrong, wrong, wrong, wrong, wrong]    # five colours to be used for display
-    turn = 1                                        # turn counter
-    streak = 0                                      # win-streak counter
-    display_line = ['_', '_', '_', '_', '_']        # used at start of round before first guess
+    word            = get_word()                                        # Solution to current round.                    list
+    colors          = [wrong, wrong, wrong, wrong, wrong]               # Five colours to be used for display.          list
+    win             = [perfect, perfect, perfect, perfect, perfect]     # Used to check for correct answer.             list
+    turn            = 1                                                 # Turn counter.                                 int
+    streak          = 0                                                 # Win-streak counter.                           int
+    display_line    = ['_', '_', '_', '_', '_']                         # Used at start of round before first guess.    list
     ###
 
     # Display solution for debugging:
@@ -73,21 +95,22 @@ def play():
     ### FUNCTIONS ###
     def display(step, line, colored):
         # Prints to screen turn number and current guess, colourised.
-        # accepts   step    int
-        #           line    list
-        #           colored list
+        # accepts turn number, word to display, colours to use as:
+        #   step    int
+        #   line    list
+        #   colored list
         # prints "{int}:, G U E S S"
 
         ## VARIABLES ##
 
-        # Five characters used in guess, read from input {line}
+        # Five characters used in guess, read from input {line}.
         char0 = line[0]
         char1 = line[1]
         char2 = line[2]
         char3 = line[3]
         char4 = line[4]
 
-        # Five colours used when displaying, read from input {colored}
+        # Five colours used when displaying, read from input {colored}.
         color0 = colored[0]
         color1 = colored[1]
         color2 = colored[2]
@@ -96,6 +119,7 @@ def play():
         ##
 
         # Prints using colorama modules e.g. {Fore.GREEN}{'D'}
+        # uses Style.RESET_ALL so that any colour changes do not affect the next display.
         print(f"{step}: {color0}{char0} {color1}{char1} {color2}{char2} {color3}{char3} {color4}{char4} {Style.RESET_ALL}")
 
     def play_again():
@@ -111,8 +135,8 @@ def play():
         # either starts new round or closes the session.
         
         ## VARIABLES
-        global turn             # takes game turn counter to reset to 0 for new game
-        replay = play_again()   # takes user input either 'Y' or 'N'
+        global turn             # Takes game turn counter to reset to 0 for new game.   int
+        replay = play_again()   # Takes user input either 'Y' or 'N'.                   string
         ##
 
         # start new round
@@ -131,10 +155,10 @@ def play():
     ###
 
 
-    # prints first blank line to screen
+    # Prints first blank line to screen.
     display(0, display_line, colors)
 
-    # takes user input, accepts only five letter words from acceptable_list (based on set_game_settings() )
+    # Takes user input, accepts only five letter words from acceptable_list (based on set_game_settings() ).
     guess = ''
     while guess == '':
         guess = input("Your guess: ")
@@ -144,10 +168,10 @@ def play():
             guess = ''
         
         else:
-            # breaks guess into string of five characters
+            # Breaks guess into string of five characters.
             next_display = [ char.upper() for char in guess]
 
-            # compares each character to solution and assigns colours
+            # Compares each character to solution and assigns colours.
             for i in range(5):
                 char = next_display[i]               
                 if char in word:
@@ -155,38 +179,39 @@ def play():
                 if char == word[i]:
                     colors[i] = perfect
 
-            # prints colourised guess to screen
+            # Prints colourised guess to screen.
             display(turn, next_display, colors)
 
-            # checks whether guess is correct answer
-            # if correct, adds to win-streak counter and offers a new game
+            # Checks whether guess is correct answer;
+            # if correct, adds to win-streak counter and offers a new game.
             if colors == win:
                 print("Winner!")
                 streak += 1
                 print(f"streak = {streak}")
                 turn, word = restart()
 
-            # checks whether turn limit is exceeded
-            # if so, solution is shown, win-streak counter is reset, and offers a new game
+            # Checks whether turn limit is exceeded;
+            # if so, solution is shown, win-streak counter is reset, and offers a new game.
             elif turn >= 6:
                 print("LOSER!  It was:")
                 display('', word, [wrong, wrong, wrong, wrong, wrong])
                 turn, word = restart()
                 streak = 0
 
-            # resets guess and colours for next entry, increments turn counter
+            # Resets guess and colours for next entry, increments turn counter.
             guess = ''
             colors = [wrong, wrong, wrong, wrong, wrong]
             turn += 1
 ####
             
 
-# Game begins
-# asks user for choice of settings to establish word list(s)
+# Game begins:
+# asks user for choice of settings to establish word list(s).
 print("#### Welcome to Wordle (knock-off)! ####")
 print(" ")
 print("Would you like to play with the ORIGINAL Wordle word-list (a smaller selection of more common words), or with the DALE list (larger selection of less common words)?")
 
 word_list, acceptable_list = set_game_settings()
 
-play()
+if __name__ == "__main__":
+    play()
